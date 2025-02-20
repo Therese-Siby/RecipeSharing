@@ -1,66 +1,88 @@
 import React, { useState } from "react";
+import { Container, Form, Button } from "react-bootstrap";
 
 const CreateRecipe = () => {
-  const [title, setTitle] = useState("");
-  const [ingredients, setIngredients] = useState("");
-  const [instructions, setInstructions] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [recipe, setRecipe] = useState({
+    title: "",
+    ingredients: "",
+    instructions: "",
+    image: "",
+  });
+
+  const handleChange = (e) => {
+    setRecipe({ ...recipe, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess(false);
-
-    if (!title.trim() || !ingredients.trim() || !instructions.trim()) {
-      setError("All fields are required.");
-      return;
-    }
-
-    console.log({ title, ingredients, instructions });
-    setSuccess(true);
-    setTitle("");
-    setIngredients("");
-    setInstructions("");
+    console.log("Recipe Submitted:", recipe);
+    // Later, we'll save this to a database
   };
 
   return (
-    <div className="container mt-5">
-      <h2>Create Recipe</h2>
-      {error && <div className="alert alert-danger">{error}</div>}
-      {success && <div className="alert alert-success">Recipe submitted successfully!</div>}
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label className="form-label">Recipe Title</label>
-          <input
+    <Container className="mt-5 p-4 bg-light rounded shadow">
+      <h2 className="fw-bold text-center text-dark">Create a Recipe</h2>
+
+      <Form onSubmit={handleSubmit}>
+        {/* Recipe Title */}
+        <Form.Group className="mb-3">
+          <Form.Label className="fw-bold">Recipe Title</Form.Label>
+          <Form.Control
             type="text"
-            className="form-control"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            name="title"
+            value={recipe.title}
+            onChange={handleChange}
+            placeholder="Enter recipe title"
             required
           />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Ingredients</label>
-          <textarea
-            className="form-control"
-            value={ingredients}
-            onChange={(e) => setIngredients(e.target.value)}
+        </Form.Group>
+
+        {/* Ingredients */}
+        <Form.Group className="mb-3">
+          <Form.Label className="fw-bold">Ingredients</Form.Label>
+          <Form.Control
+            as="textarea"
+            name="ingredients"
+            value={recipe.ingredients}
+            onChange={handleChange}
+            placeholder="List ingredients..."
+            rows={3}
             required
           />
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Instructions</label>
-          <textarea
-            className="form-control"
-            value={instructions}
-            onChange={(e) => setInstructions(e.target.value)}
+        </Form.Group>
+
+        {/* Instructions */}
+        <Form.Group className="mb-3">
+          <Form.Label className="fw-bold">Instructions</Form.Label>
+          <Form.Control
+            as="textarea"
+            name="instructions"
+            value={recipe.instructions}
+            onChange={handleChange}
+            placeholder="Step-by-step instructions..."
+            rows={5}
             required
           />
-        </div>
-        <button type="submit" className="btn btn-primary">Submit Recipe</button>
-      </form>
-    </div>
+        </Form.Group>
+
+        {/* Image Upload */}
+        <Form.Group className="mb-3">
+          <Form.Label className="fw-bold">Recipe Image</Form.Label>
+          <Form.Control
+            type="text"
+            name="image"
+            value={recipe.image}
+            onChange={handleChange}
+            placeholder="Enter image URL"
+          />
+        </Form.Group>
+
+        {/* Submit Button */}
+        <Button type="submit" className="fw-bold w-100" style={{ backgroundColor: "#17a2b8", border: "none" }}>
+          Submit Recipe
+        </Button>
+      </Form>
+    </Container>
   );
 };
 
